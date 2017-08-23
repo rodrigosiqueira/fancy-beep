@@ -61,6 +61,23 @@ function beepcontrol ()
     exit 0
   fi
 
+  # Convert minutes and hours
+  local timeExtension="${parameters["t"]//[[:digit:]]/}"
+  case $timeExtension in
+    m)
+      local value="${parameters["t"]%%m}"
+      parameters["t"]=$(( value * 60 ))
+    ;;
+    h)
+      local value="${parameters["t"]%%h}"
+      parameters["t"]=$(( value * 3600 ))
+    ;;
+    * )
+      local value="${parameters["t"]//[[:alpha:]]/}"
+      parameters["t"]=$value
+    ;;
+  esac
+
   local interval_of_interactions=$(eval echo {1..${parameters["i"]}})
   local repetition_sequence=$(eval echo {1..${parameters["r"]}})
   for interaction in $interval_of_interactions; do
