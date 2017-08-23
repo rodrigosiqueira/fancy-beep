@@ -12,7 +12,8 @@ declare -r sound_app="paplay"
 
 function usage()
 {
-  echo "Usage: beep [OPTION]"
+  echo "Usage: fancy-beep [-OPTION] [COMMAND [ARGS]]"
+  echo "   or: fancy-beep [-OPTION]"
   echo -e "\t-t\tSpecify time to wait (Seconds)"
   echo -e "\t-r\tTotal of sound repetitions"
   echo -e "\t-i\tTotal of intervals"
