@@ -17,7 +17,7 @@ function usage()
   echo -e "\t-t\tSpecify time to wait (Seconds)"
   echo -e "\t-r\tTotal of sound repetitions"
   echo -e "\t-i\tTotal of intervals"
-  exit 0
+  return 0
 }
 
 function beepcontrol ()
@@ -34,6 +34,7 @@ function beepcontrol ()
         ;;
       h | * | \?)
         usage
+        return 1
         ;;
     esac
   done
