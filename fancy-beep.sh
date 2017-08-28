@@ -10,21 +10,13 @@ declare -r FANCY_BEEP="fancy-beep"
 declare -r sound_path="$HOME/.config/$FANCY_BEEP/sounds/complete.oga"
 declare -r sound_app="paplay"
 
-function usage()
-{
-  echo "Usage: fancy-beep [-OPTION] [COMMAND [ARGS]]"
-  echo "   or: fancy-beep [-OPTION]"
-  echo -e "\t-t\tSpecify time to wait (Seconds)"
-  echo -e "\t-r\tTotal of sound repetitions"
-  echo -e "\t-i\tTotal of intervals"
-  return 0
-}
-
 function beepcontrol ()
 {
   local -A parameters
   local -i totalShift=0
   local OPTIND
+
+  . ./includes/usage.sh --source-only
 
   while getopts "t:r:i:h" option; do
     case $option in
@@ -33,7 +25,7 @@ function beepcontrol ()
         (( totalShift += 2 ))
         ;;
       h | * | \?)
-        usage
+        usage-fancy-beep
         return 1
         ;;
     esac
