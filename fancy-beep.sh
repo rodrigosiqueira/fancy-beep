@@ -6,13 +6,17 @@
 
 #!/bin/bash
 
-declare -r FANCY_BEEP="fancy-beep"
-declare -r sound_path="$HOME/.config/$FANCY_BEEP/sounds/complete.oga"
-declare -r sound_app="paplay"
+FANCY_BEEP="fancy-beep"
+sound_path="$HOME/.config/$FANCY_BEEP/sounds/complete.oga"
+sound_app="paplay"
+
+main_fancy_beep_path="$HOME/.config/$FANCY_BEEP/src"
+
+export FANCY_BEEP
+export sound_path
+export sound_app
 
 function fancy-beep ()
 {
-  . ./includes/usage.sh --source-only
-  . ./includes/beep-control.sh --source-only
-  (>&2 beep-control "$@" &)
+  (>&2 bash $main_fancy_beep_path/main-fancy-beep.sh "$@" &)
 }

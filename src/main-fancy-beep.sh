@@ -4,13 +4,20 @@
 # This source code is licensed under the GNU general public license,
 # Version 3.  See the file COPYING for more details
 
+function usage-fancy-beep()
+{
+  echo "Usage: fancy-beep [-OPTION] [COMMAND [ARGS]]"
+  echo "   or: fancy-beep [-OPTION]"
+  echo -e "\t-t\tSpecify time to wait (Seconds)"
+  echo -e "\t-r\tTotal of sound repetitions"
+  echo -e "\t-i\tTotal of intervals"
+}
+
 function beep-control ()
 {
   local -A parameters
   local -i totalShift=0
   local OPTIND
-
-  . ./includes/usage.sh --source-only
 
   while getopts "t:r:i:h" option; do
     case $option in
@@ -20,7 +27,7 @@ function beep-control ()
         ;;
       h | * | \?)
         usage-fancy-beep
-        return 1
+        exit 0
         ;;
     esac
   done
@@ -58,3 +65,5 @@ function beep-control ()
     done
   done
 }
+
+beep-control "$@"
