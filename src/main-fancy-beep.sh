@@ -13,6 +13,13 @@ function usage-fancy-beep()
   echo -e "\t-i\tTotal of intervals"
 }
 
+function eval-command-and-sound ()
+{
+  eval "$@"
+  eval $sound_app $sound_path
+  exit 0
+}
+
 function beep-control ()
 {
   local -A parameters
@@ -51,9 +58,7 @@ function beep-control ()
   fi
 
   if [ $# -ne 0 ]; then
-    eval "$@"
-    eval $sound_app $sound_path
-    exit 0
+    eval-command-and-sound "$@"
   fi
 
   local interval_of_interactions=$(eval echo {1..${parameters["i"]}})

@@ -13,6 +13,7 @@ declare -r REDCOLOR="\033[1;31;49m%s\033[m\n"
 declare -r SEPARATOR="========================================================="
 declare -r APPLICATIONNAME="fancy-beep"
 declare -r TARGETDIR="sounds"
+declare -r SRCDIR="src"
 declare -r INSTALLTO="$HOME/.config/$APPLICATIONNAME"
 
 # Print normal message (e.g info messages). This function verifies if stdout
@@ -70,6 +71,7 @@ function synchronize_files()
 
   # Copy the script
   cp $APPLICATIONNAME.sh $INSTALLTO
+  rsync -vr $SRCDIR $INSTALLTO
   # Copy Application file
   rsync -vr $TARGETDIR $INSTALLTO
 

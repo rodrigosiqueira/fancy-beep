@@ -12,6 +12,12 @@ setUp()
   sound_app="paplay"
   main_fancy_beep_path="src"
   export_variables
+
+  # Set a path structure for test fancy-beep with ls
+  target_output='tests/temp_files'
+  mkdir -p $target_output
+  touch $target_output/test1.txt
+  touch $target_output/test2.txt
 }
 
 tearDown()
@@ -20,6 +26,9 @@ tearDown()
   sound_app=$sound_app_ORIG
   main_fancy_beep_path=$main_fancy_beep_path_ORIG
   export_variables
+  # Clean up directory for ls test
+  rm -rf $target_output
+  unset target_output
 }
 
 function export_variables ()
@@ -27,12 +36,6 @@ function export_variables ()
   export FANCY_BEEP
   export sound_path
   export sound_app
-}
-
-test_beep_control_help ()
-{
-  fancy-beep -h
-  assertEquals 'Help parameter not work' $? 0
 }
 
 test_beep_eval_command ()
