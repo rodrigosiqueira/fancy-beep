@@ -26,12 +26,16 @@ function beep-control ()
   local -i totalShift=0
   local OPTIND
 
-  while getopts "t:r:i:h" option; do
+  while getopts "t:r:i:lh" option; do
     case $option in
       t | r | i)
         parameters[$option]=$OPTARG
         (( totalShift += 2 ))
         ;;
+      l)
+        cat $log_path
+        exit 0
+      ;;
       h | * | \?)
         usage-fancy-beep
         exit 0
@@ -61,12 +65,18 @@ function beep-control ()
     eval-command-and-sound "$@"
   fi
 
+  # Create log file
+  local currentDate="$(date +"%m/%d/%y %T")"
+  local timeStamp=$(date -d "$currentDate" +"%s")
+  echo "$timeStamp" >> $log_path
+
   local interval_of_interactions=$(eval echo {1..${parameters["i"]}})
   local repetition_sequence=$(eval echo {1..${parameters["r"]}})
   for interaction in $interval_of_interactions; do
     for repetition in $repetition_sequence; do
       sleep ${parameters["t"]}
       eval $sound_app $sound_path
+      eval "sed -i '/$timeStamp/d' $log_path"
     done
   done
 }
