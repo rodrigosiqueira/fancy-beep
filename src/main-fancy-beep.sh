@@ -11,6 +11,7 @@ function usage-fancy-beep()
   echo -e "\t-t\tSpecify time to wait (Seconds)"
   echo -e "\t-r\tTotal of sound repetitions"
   echo -e "\t-i\tTotal of intervals"
+  echo -e "\t-l\tShow log time"
 }
 
 function eval-command-and-sound ()
@@ -18,6 +19,37 @@ function eval-command-and-sound ()
   eval "$@"
   eval $sound_app $sound_path
   exit 0
+}
+
+function get-timestamp ()
+{
+  local currentDate="$(date +"%m/%d/%y %T")"
+  local timeStamp=$(date -d "$currentDate" +"%s")
+  echo "$timeStamp"
+}
+
+function add-to-logfile ()
+{
+  local timeStamp=$(get-timestamp)
+  echo "$timeStamp" >> $log_path
+  # get timestamp as a return
+  echo "$timeStamp"
+}
+
+function clean-up-logfile ()
+{
+  local timeStamp=$1
+  eval "sed -i '/$timeStamp/d' $log_path"
+}
+
+function show-log-time ()
+{
+  local timestamp=$(get-timestamp)
+
+  echo "Table of elapsed time:"
+  while IFS='' read line; do
+    echo " $(( timestamp - line ))"
+  done < "$log_path"
 }
 
 function beep-control ()
@@ -33,9 +65,9 @@ function beep-control ()
         (( totalShift += 2 ))
         ;;
       l)
-        cat $log_path
+        show-log-time
         exit 0
-      ;;
+        ;;
       h | * | \?)
         usage-fancy-beep
         exit 0
@@ -66,9 +98,7 @@ function beep-control ()
   fi
 
   # Create log file
-  local currentDate="$(date +"%m/%d/%y %T")"
-  local timeStamp=$(date -d "$currentDate" +"%s")
-  echo "$timeStamp" >> $log_path
+  local timeStamp=$(add-to-logfile)
 
   local interval_of_interactions=$(eval echo {1..${parameters["i"]}})
   local repetition_sequence=$(eval echo {1..${parameters["r"]}})
@@ -76,7 +106,7 @@ function beep-control ()
     for repetition in $repetition_sequence; do
       sleep ${parameters["t"]}
       eval $sound_app $sound_path
-      eval "sed -i '/$timeStamp/d' $log_path"
+      clean-up-logfile  $timeStamp
     done
   done
 }
