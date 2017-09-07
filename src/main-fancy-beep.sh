@@ -21,19 +21,12 @@ function eval-command-and-sound ()
   exit 0
 }
 
-function get-timestamp ()
-{
-  local currentDate="$(date +"%m/%d/%y %T")"
-  local timeStamp=$(date -d "$currentDate" +"%s")
-  echo "$timeStamp"
-}
-
 function add-to-logfile ()
 {
-  local timeStamp=$(get-timestamp)
-  echo "$timeStamp" >> $log_path
+  local timestamp=$(date +%s)
+  echo "$timestamp" >> $log_path
   # get timestamp as a return
-  echo "$timeStamp"
+  echo "$timestamp"
 }
 
 function clean-up-logfile ()
@@ -44,10 +37,10 @@ function clean-up-logfile ()
 
 function show-log-time ()
 {
-  local timestamp=$(get-timestamp)
+  local -i timestamp=$(date +%s)
 
   echo "Table of elapsed time:"
-  while IFS='' read line; do
+  while IFS='' read line || [[ -n "$line" ]]; do
     echo " $(( timestamp - line ))"
   done < "$log_path"
 }
