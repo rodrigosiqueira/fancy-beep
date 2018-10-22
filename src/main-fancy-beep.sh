@@ -59,11 +59,11 @@ function beep-control ()
         ;;
       l)
         show-log-time
-        exit 0
+        return 0
         ;;
       h | * | \?)
         usage-fancy-beep
-        exit 0
+        return 0
         ;;
     esac
   done
@@ -103,5 +103,3 @@ function beep-control ()
     done
   done
 }
-
-beep-control "$@"

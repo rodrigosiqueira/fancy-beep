@@ -21,5 +21,9 @@ export log_path
 # Main function responsible for call fancy beep
 function fancy-beep ()
 {
-  (>&2 bash $main_fancy_beep_path/main-fancy-beep.sh "$@" &)
+  (
+    . $main_fancy_beep_path/main-fancy-beep.sh --source-only
+
+    beep-control "$@" &
+  )
 }
